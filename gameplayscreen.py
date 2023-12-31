@@ -28,3 +28,21 @@ class BoardWindow(object):
         self.root.resizable(False, False) 
         self.root.iconbitmap("./frame0/icon.ico")
         
+        # Part 1: Top part
+        self.top_frame = tk.Frame(self.root, height=40, bg="#997950")
+        self.top_frame.pack(fill=tk.X)
+
+        # Mode label
+        self.modelabel = tk.Label(self.top_frame, text=f"Mode: {self.mode}", font=("Supply Center", 14), bg="#997950")
+        self.modelabel.place(x=10, y = 5)
+
+        # Turn label
+        self.turn_label = tk.Label(self.top_frame, text=f"Turn: Player 1 - {self.turn}", font=("Supply Center", 14), bg="#997950")
+        
+        if self.mode == "AI VS AI":
+            self.turn_label = tk.Button(self.top_frame, text="START",font=("Supply Center", 14), bg="#997950",activebackground="#795C32", bd=0, cursor="hand2", command=self.AIvsAI)
+        self.turn_label.place(x=550, y = 5)
+
+        # Quit button
+        self.quit_button = tk.Button(self.top_frame, text="Quit",font=("Supply Center", 14),bg="#997950", bd=0,activebackground="#660000", cursor="hand2", command=self.confirm_quit)
+        self.quit_button.place(x=1130, y = 4)
