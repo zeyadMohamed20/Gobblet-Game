@@ -33,6 +33,10 @@ def tree_expand(board, depth):
     for i in range(len(root.children)):
         toc = time.perf_counter()
         print(f"{(toc - tic):0.4f}")
-        root.children[i] = tree_expand(root.children[i].board, depth - 1)
+        if ((toc - tic) <= 15):
+            root.children[i] = tree_expand(root.children[i].board, depth - 1)   
+        else:
+            time_limit_flag = True
+            break
 
     return root
