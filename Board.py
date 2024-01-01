@@ -41,7 +41,7 @@ class Board:
             self.to_row = board1.to_row
             self.to_col = board1.to_col
             
-            # checks if there are 4 cells of the same color on the same row colomn or diagonal
+    # checks if there are 4 cells of the same color on the same row colomn or diagonal
     flag = False
     def check_winner(self):
         for i in range(4):
@@ -67,6 +67,21 @@ class Board:
 
         return Player.NONE
         
-        # changes current player
+    # changes current player
     def play_next(self):
         self.current_player = Player.White if self.current_player == Player.Black else Player.Black
+    
+    # move gobblet by removing it from a cell and put it in another cell
+    def move_gobblet(self, player, row_from, column_from, row_to, column_to):
+        size = self.get_gobblet_size(row_from, column_from)
+
+        if (self.board_cells[row_to][column_to].check_validity(size) and self.board_cells[row_from][column_from].remove_gobblet(player, size)):
+            self.board_cells[row_to][column_to].add_gobblet(player, size)
+            self.flag_add = False
+            self.to_row = row_to
+            self.to_col = column_to
+            self.from_row = row_from
+            self.from_col = column_from
+            return True
+        else:
+            return False
