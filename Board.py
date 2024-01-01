@@ -1,8 +1,3 @@
-# Commit Message: Initialize Board Class with Constructor
-# Initial setup of the Board class, including the constructor and instance variables.
-# Handles the initialization of the game board, out gobblet arrays, and current player.
-# Defines methods for moving gobblets, adding gobblets to the board, and checking validity.
-
 from cell import Cell, Player, _4th
 import copy
 
