@@ -21,3 +21,18 @@ def iterative_deepening(board, depth, maximizing_player, root_flag):
         else:
             break
     return temp_node
+    
+    
+def tree_expand(board, depth):
+    global time_limit_flag
+    root = TreeNode(board)
+    root_expand(root)
+    if depth == 1:
+        return root
+
+    for i in range(len(root.children)):
+        toc = time.perf_counter()
+        print(f"{(toc - tic):0.4f}")
+        root.children[i] = tree_expand(root.children[i].board, depth - 1)
+
+    return root
