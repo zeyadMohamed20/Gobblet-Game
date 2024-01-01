@@ -440,3 +440,18 @@ class BoardWindow(object):
                 for widget in self.root.winfo_children():
                     widget.destroy()
                 start(self.root, self.player1, self.player2, 3, self.difficulty1, self.difficulty2)
+
+    def stack_click(self, player, stack):
+        self.stack_flag = True
+        if player == Player.White:
+            self.current_stack = stack
+            self.current_player = Player.White
+            for btn in self.player0_stacks:
+                if btn != None:
+                    btn['state'] = "disabled"
+        else:
+            self.current_stack = stack
+            self.current_player = Player.Black
+            for btn in self.player1_stacks:
+                if btn != None:
+                    btn['state'] = "disabled"
