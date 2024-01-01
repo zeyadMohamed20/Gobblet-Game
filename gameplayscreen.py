@@ -704,3 +704,22 @@ class BoardWindow(object):
                 if self.mode == "Player VS AI": mode = 2 
                 else: mode = 1
                 start(self.root, self.player1, self.player2, mode, self.difficulty1, self.difficulty2)
+    
+    def confirm_quit(self):
+        result = messagebox.askquestion("Quit", "Are you sure you want to quit?", icon='warning')
+        if result == 'yes':
+            self.root.destroy()
+         
+    
+def start(root, p1, p2,mode=1, d1=None, d2=None):
+    global app
+    if mode==1:
+        msg = "Player VS Player"
+    elif mode == 2:
+        msg = "Player VS AI"
+    elif mode == 3:
+        msg = "AI VS AI"
+    else:
+        return
+    app = BoardWindow(root, player1=p1, player2=p2, difficulty1=d1, difficulty2=d2, mode=msg)
+    root.mainloop()
