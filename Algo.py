@@ -51,8 +51,21 @@ def root_expand(root):
                             new_board.play_next()
                             child = TreeNode(new_board)
                             root.add_child(child)
+        else:
+            if (i != 1 or (i == 1 and root.board.white_out_gobblets[i] != root.board.white_out_gobblets[i - 1])) and \
+                    (i != 2 or (
+                            i == 2 and root.board.white_out_gobblets[i] != root.board.white_out_gobblets[i - 1])) and \
+                    (i != 2 or (i == 2 and root.board.white_out_gobblets[i] != root.board.white_out_gobblets[i - 2])):
+                for k in range(4):
+                    for l in range(4):
+                        temp_board = Board(root.board)
+                        new_board = temp_board
+                        bit = new_board.white_out_gobblets[i]
+                        if new_board.board_add_gobblet(k, l, new_board.current_player, bit):
+                            new_board.play_next()
+                            child = TreeNode(new_board)
+                            root.add_child(child)
 
-    
 def tree_expand(board, depth):
     global time_limit_flag
     root = TreeNode(board)
