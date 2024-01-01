@@ -22,6 +22,36 @@ def iterative_deepening(board, depth, maximizing_player, root_flag):
             break
     return temp_node
     
+def root_expand(root):
+    if root.board.check_winner() != Player.NONE:
+        return root
+    for i in range(4):
+        for j in range(4):
+            if root.board.board_cells[i][j].owner == root.board.current_player:
+                for k in range(4):
+                    for l in range(4):
+                        temp_board = Board(root.board)
+                        new_board = temp_board
+                        if new_board.move_gobblet(new_board.current_player, i, j, k, l):
+                            new_board.play_next()
+                            child = TreeNode(new_board)
+                            root.add_child(child)
+
+    for i in range(3):
+        if root.board.current_player == Player.Black:
+            if (i != 1 or (i == 1 and root.board.black_out_gobblets[i] != root.board.black_out_gobblets[i - 1])) and \
+                    (i != 2 or (
+                            i == 2 and root.board.black_out_gobblets[i] != root.board.black_out_gobblets[i - 1])) and \
+                    (i != 2 or (i == 2 and root.board.black_out_gobblets[i] != root.board.black_out_gobblets[i - 2])):
+                for k in range(4):
+                    for l in range(4):
+                        temp_board = Board(root.board)
+                        new_board = temp_board
+                        if new_board.board_add_gobblet(k, l, new_board.current_player, new_board.black_out_gobblets[i]):
+                            new_board.play_next()
+                            child = TreeNode(new_board)
+                            root.add_child(child)
+
     
 def tree_expand(board, depth):
     global time_limit_flag
