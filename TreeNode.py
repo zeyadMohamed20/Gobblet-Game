@@ -26,4 +26,130 @@ class TreeNode:
     def add_child(self, child):
         self.children.append(child)
 
+    def calc_value(self):
+        self.Value = 0
+        # increase value according to number of owned cell and it's gobblet size
+        for i in range(4):
+            for j in range(4):
+                if self.board.board_cells[i][j].owner == Player.Black:
+                    self.Value += self.board.board_cells[i][j].get_gobblet_size()
+                elif self.board.board_cells[i][j].owner == Player.White:
+                    self.Value -= self.board.board_cells[i][j].get_gobblet_size()
+
+        for i in range(4):
+            black_count = 0
+            white_count = 0
+
+            for j in range(4):
+                if self.board.board_cells[i][j].owner == Player.Black:
+                    black_count += 1
+                elif self.board.board_cells[i][j].owner == Player.White:
+                    white_count += 1
+            # add value according to number of owned cells in rows
+            if black_count >= 3:
+                self.Value += 100
+            elif white_count >= 3:
+                self.Value -= 100
+            elif black_count == white_count:
+                self.Value += 0
+            elif black_count == 2:
+                self.Value += 50
+            elif white_count == 2:
+                self.Value -= 50
+            if black_count > 3:
+                self.Value += 10000
+
+            elif white_count > 3:
+                self.Value -= 10000
+
+            if black_count == 3 and white_count == 1:
+                self.Value -= 500
+            elif white_count == 3 and black_count == 1:
+                self.Value += 500
+
+            black_count = 0
+            white_count = 0
+            # add value according to number of owned cells in colomn
+            for j in range(4):
+                if self.board.board_cells[j][i].owner == Player.Black:
+                    black_count += 1
+                elif self.board.board_cells[j][i].owner == Player.White:
+                    white_count += 1
+
+            if black_count >= 3:
+                self.Value += 100
+            elif white_count >= 3:
+                self.Value -= 100
+
+            elif black_count == white_count:
+                self.Value += 0
+            elif black_count == 2:
+                self.Value += 50
+            elif white_count == 2:
+                self.Value -= 50
+            if black_count > 3:
+                self.Value += 10000
+
+            elif white_count > 3:
+                self.Value -= 10000
+
+            if black_count == 3 and white_count == 1:
+                self.Value -= 500
+            elif white_count == 3 and black_count == 1:
+                self.Value += 500
+        black_count = 0
+        white_count = 0
+        for j in range(4):
+            if self.board.board_cells[j][j].owner == Player.Black:
+                black_count += 1
+            elif self.board.board_cells[j][j].owner == Player.White:
+                white_count += 1
+        if black_count >= 3:
+            self.Value += 100
+        elif white_count >= 3:
+            self.Value -= 100
+        elif black_count == white_count:
+            self.Value += 0
+        elif black_count == 2:
+            self.Value += 50
+        elif white_count == 2:
+            self.Value -= 50
+        if black_count > 3:
+            self.Value += 10000
+
+        elif white_count > 3:
+            self.Value -= 10000
+
+        if black_count == 3 and white_count == 1:
+            self.Value -= 500
+        elif white_count == 3 and black_count == 1:
+            self.Value += 500
+
+        black_count = 0
+        white_count = 0
+        for j in range(4):
+            if self.board.board_cells[j][abs(j - 3)].owner == Player.Black:
+                black_count += 1
+            elif self.board.board_cells[j][abs(j - 3)].owner == Player.White:
+                white_count += 1
+        if black_count >= 3:
+            self.Value += 100
+        elif white_count >= 3:
+            self.Value -= 100
+        elif black_count == white_count:
+            self.Value += 0
+        elif black_count == 2:
+            self.Value += 50
+        elif white_count == 2:
+            self.Value -= 50
+        if black_count > 3:
+            self.Value += 10000
+
+        elif white_count > 3:
+            self.Value -= 10000
+
+        if black_count == 3 and white_count == 1:
+            self.Value -= 500
+        elif white_count == 3 and black_count == 1:
+            self.Value += 500
     
