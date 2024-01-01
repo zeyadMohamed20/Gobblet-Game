@@ -7,6 +7,16 @@ import time
 
 time_limit_flag = False
 
+def generate_random_integer():
+    # Use the current time as a seed
+    seed_value = int(time.time())
+    random.seed(seed_value)
+
+    # Generate a random integer in the range [0, 3]
+    random_integer = random.randint(0, 3)
+
+    return random_integer
+
 
 def iterative_deepening(board, depth, maximizing_player, root_flag):
     global time_limit_flag
