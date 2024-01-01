@@ -40,3 +40,29 @@ class Board:
             self.from_col = board1.from_col
             self.to_row = board1.to_row
             self.to_col = board1.to_col
+            
+            # checks if there are 4 cells of the same color on the same row colomn or diagonal
+    flag = False
+    def check_winner(self):
+        for i in range(4):
+            if all(cell.owner == Player.Black for cell in self.board_cells[i]):
+                return Player.Black
+            elif all(cell.owner == Player.White for cell in self.board_cells[i]):
+                return Player.White
+
+        for j in range(4):
+            if all(self.board_cells[i][j].owner == Player.Black for i in range(4)):
+                return Player.Black
+            elif all(self.board_cells[i][j].owner == Player.White for i in range(4)):
+                return Player.White
+
+        if all(self.board_cells[i][i].owner == Player.Black for i in range(4)):
+            return Player.Black
+        elif all(self.board_cells[i][i].owner == Player.White for i in range(4)):
+            return Player.White
+        if all(self.board_cells[i][abs(3 - i)].owner == Player.Black for i in range(4)):
+            return Player.Black
+        elif all(self.board_cells[i][abs(3 - i)].owner == Player.White for i in range(4)):
+            return Player.White
+
+        return Player.NONE
