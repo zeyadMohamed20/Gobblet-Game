@@ -1,7 +1,12 @@
 import tkinter as tk
+from tkinter import PhotoImage
 from PIL import Image, ImageTk
+from tkinter import messagebox
+from cell import *
 import os
-
+from Board import *
+from Algo import *
+import time
 
 
 app = None
@@ -291,3 +296,147 @@ class BoardWindow(object):
         if self.mode == "AI VS AI":
             for btn in self.player0_stacks:
                 btn['state'] = "disabled"
+
+    def AIvsAI(self):
+        if self.mode == "AI VS AI":
+            self.turn_label = tk.Label(self.top_frame, text=f"Turn: {self.turn}", font=("Supply Center", 14), bg="#997950")
+            self.turn_label.place(x=550, y = 5)
+            time.sleep(2)
+            for btn in self.player1_stacks:
+                if btn != None:
+                    btn['state'] = "disabled"
+            for btn in self.player0_stacks:
+                if btn != None:
+                    btn['state'] = "disabled"
+            for row in self.board_grid:
+                for btn in row:
+                    btn['state'] = "disabled"
+            state = self.board.check_winner()
+            Board.flag = False
+            while(state == Player.NONE):
+                self.root.update()
+                time.sleep(2)
+                temp = bot_turn(self.board, self.difficulty1, Player.White)
+                self.board = copy.deepcopy(temp)
+                if self.board.flag_add == True:
+                    self.board_grid[self.board.curr_row][self.board.curr_col]['image'] = self.player0_image[self.player0_stack_image[self.board.curr_stack]]
+                    self.player0_stack_image[self.board.curr_stack] += 1
+                    if self.player0_stack_image[self.board.curr_stack] >= 4:
+                        self.player0_stacks[self.board.curr_stack].destroy()
+                        self.player0_stacks[self.board.curr_stack] = None
+                    else:
+                        self.player0_stacks[self.board.curr_stack]['image'] = self.player0_image[self.player0_stack_image[self.board.curr_stack]]
+                else:
+                    prevCell_owner,prevCell_size = self.board.board_cells[self.board.from_row][self.board.from_col].get_gobblet()
+                    currCell_owner,currCell_size = self.board.board_cells[self.board.to_row][self.board.to_col].get_gobblet()
+                    if prevCell_size == 8:
+                        prev_index = 0
+                    elif prevCell_size == 4:
+                        prev_index = 1
+                    elif prevCell_size == 2:
+                        prev_index = 2
+                    elif prevCell_size == 1:
+                        prev_index = 3
+                    else: prev_index = None
+
+                    if currCell_size == 8:
+                        curr_index = 0
+                    elif currCell_size == 4:
+                        curr_index = 1
+                    elif currCell_size == 2:
+                        curr_index = 2
+                    elif currCell_size == 1:
+                        curr_index = 3
+                    else: curr_index = None
+
+                    if(prevCell_owner == Player.White):
+                        if prev_index != None:
+                            self.board_grid[self.board.from_row][self.board.from_col]['image'] = self.player0_image[prev_index]
+                        else:
+                            self.board_grid[self.board.from_row][self.board.from_col]['image'] = self.trans
+                    else:
+                        if prev_index != None:
+                            self.board_grid[self.board.from_row][self.board.from_col]['image'] = self.player1_image[prev_index]
+                        else:
+                            self.board_grid[self.board.from_row][self.board.from_col]['image'] = self.trans
+
+                    if(currCell_owner == Player.White):
+                        self.board_grid[self.board.to_row][self.board.to_col]['image'] = self.player0_image[curr_index]
+                    else:
+                        self.board_grid[self.board.to_row][self.board.to_col]['image'] = self.player1_image[curr_index]
+                        
+
+                self.current_player = Player.Black
+                self.turn_label['text'] = f"Turn: {self.player2}"
+                self.root.update()
+                time.sleep(2)
+                self.state = self.board.check_winner()
+                if(self.state != Player.NONE):
+                    break
+                temp = bot_turn(self.board, self.difficulty2, Player.Black)
+                self.board = copy.deepcopy(temp)
+                if self.board.flag_add == True:
+                    self.board_grid[self.board.curr_row][self.board.curr_col]['image'] = self.player1_image[self.player1_stack_image[self.board.curr_stack]]
+                    self.player1_stack_image[self.board.curr_stack] += 1
+                    if self.player1_stack_image[self.board.curr_stack] >= 4:
+                        self.player1_stacks[self.board.curr_stack].destroy()
+                        self.player1_stacks[self.board.curr_stack] = None
+                    else:
+                        self.player1_stacks[self.board.curr_stack]['image'] = self.player1_image[self.player1_stack_image[self.board.curr_stack]]
+                else:
+                    prevCell_owner,prevCell_size = self.board.board_cells[self.board.from_row][self.board.from_col].get_gobblet()
+                    currCell_owner,currCell_size = self.board.board_cells[self.board.to_row][self.board.to_col].get_gobblet()
+                    if prevCell_size == 8:
+                        prev_index = 0
+                    elif prevCell_size == 4:
+                        prev_index = 1
+                    elif prevCell_size == 2:
+                        prev_index = 2
+                    elif prevCell_size == 1:
+                        prev_index = 3
+                    else: prev_index = None
+
+                    if currCell_size == 8:
+                        curr_index = 0
+                    elif currCell_size == 4:
+                        curr_index = 1
+                    elif currCell_size == 2:
+                        curr_index = 2
+                    elif currCell_size == 1:
+                        curr_index = 3
+                    else: curr_index = None
+
+                    if(prevCell_owner == Player.White):
+                        if prev_index != None:
+                            self.board_grid[self.board.from_row][self.board.from_col]['image'] = self.player0_image[prev_index]
+                        else:
+                            self.board_grid[self.board.from_row][self.board.from_col]['image'] = self.trans
+                    else:
+                        if prev_index != None:
+                            self.board_grid[self.board.from_row][self.board.from_col]['image'] = self.player1_image[prev_index]
+                        else:
+                            self.board_grid[self.board.from_row][self.board.from_col]['image'] = self.trans
+
+                    if(currCell_owner == Player.White):
+                        self.board_grid[self.board.to_row][self.board.to_col]['image'] = self.player0_image[curr_index]
+                    else:
+                        self.board_grid[self.board.to_row][self.board.to_col]['image'] = self.player1_image[curr_index]
+                self.current_player = Player.White
+                self.turn_label['text'] = f"Turn: {self.player1}"
+                self.current_stack = None
+                self.stack_flag = False
+                self.state = self.board.check_winner()
+            
+            p = None
+            if self.state == Player.Black:
+                p = f"{self.player2} - Player 2"
+            else:
+                p = f"{self.player1} - Player 1"
+            result = messagebox.askquestion("Winner Winner", f"There is a Winner!\nCongratulation, {p}\nDo you want a rematch?", icon='info', )
+            if result == 'no':
+                self.root.destroy()
+            else:
+                # Destroy all child widgets in the main window
+                for widget in self.root.winfo_children():
+                    widget.destroy()
+                start(self.root, self.player1, self.player2, 3, self.difficulty1, self.difficulty2)
