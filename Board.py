@@ -138,3 +138,42 @@ class Board:
                     break
 
         return True
+        
+    # Introduce Player-Controlled Gobblet Addition    
+    def player_add_gobblet(self, row, column, player, bit, index):
+        flag = self.board_check_validity(row, column, player, bit)
+
+        if not flag:
+            return False
+        if self.board_cells[row][column].owner != player and self.board_cells[row][column].owner != Player.NONE:
+            rows = 0
+            columns = 0
+            diagonal = 0
+
+            for i in range(4):
+                if self.board_cells[row][i].owner != player and self.board_cells[row][i].owner != Player.NONE:
+                    rows = rows + 1
+
+                if self.board_cells[i][column].owner != player and self.board_cells[i][column].owner != Player.NONE:
+                    columns = columns + 1
+            if row == column:
+                    for i in range(4):
+                        if self.board_cells[i][i].owner != player and self.board_cells[i][i].owner != Player.NONE:
+                            diagonal = diagonal + 1
+            if row + column == 3:
+                    for i in range(4):
+                        if self.board_cells[i][3-i].owner != player and self.board_cells[i][3-i].owner != Player.NONE:
+                            diagonal = diagonal + 1
+            if rows == 3 or columns == 3 or diagonal == 3:
+                temp = True
+            else:
+                return False
+
+        if player == Player.Black:
+            self.black_out_gobblets[index] = self.black_out_gobblets[index] >> 1
+            self.board_cells[row][column].add_gobblet(player, bit)
+        else:
+            self.white_out_gobblets[index] = self.white_out_gobblets[index] >> 1
+            self.board_cells[row][column].add_gobblet(player, bit)
+
+        return True    
