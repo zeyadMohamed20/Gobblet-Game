@@ -177,3 +177,45 @@ class Board:
             self.board_cells[row][column].add_gobblet(player, bit)
 
         return True    
+        
+    # check if there is a gobblet of the same size in the outside stacks, and also the cell validity
+    def board_check_validity(self, row, column, player, bit):
+        if not self.board_cells[row][column].check_validity(bit):
+            return False
+        for i in range(3):
+            if player == Player.White:
+                if self.white_out_gobblets[i] == bit:
+                    return True
+            elif player == Player.Black:
+                if self.black_out_gobblets[i] == bit:
+                    return True
+
+        return False
+
+    def get_gobblet_size(self, row, column):
+        if self.board_cells[row][column]:
+            return self.board_cells[row][column].get_gobblet_size()
+
+        return None
+
+    def Draw(self):
+        for i in range(4):
+            for j in range(4):
+                if self.board_cells[i][j].owner == Player.White:
+                    print("White", self.get_gobblet_size(i, j), "\t", end="")
+                elif self.board_cells[i][j].owner == Player.Black:
+                    print("Black", self.get_gobblet_size(i, j), "\t", end="")
+                else:
+                    print("NONE", end="\t")
+            print("\n")
+        print("BLACK OUT: ", end="")
+        for i in range(3):
+            print(self.black_out_gobblets[i], end="\t")
+        print("\n")
+
+        print("White OUT: ", end="\t")
+        for i in range(3):
+            print(self.white_out_gobblets[i], end="\t")
+        print("\n")
+
+        print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% \n")
