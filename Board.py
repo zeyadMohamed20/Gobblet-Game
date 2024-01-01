@@ -44,27 +44,33 @@ class Board:
     # checks if there are 4 cells of the same color on the same row colomn or diagonal
     flag = False
     def check_winner(self):
+        # Check rows
         for i in range(4):
             if all(cell.owner == Player.Black for cell in self.board_cells[i]):
                 return Player.Black
             elif all(cell.owner == Player.White for cell in self.board_cells[i]):
                 return Player.White
-
+    
+        # Check columns
         for j in range(4):
             if all(self.board_cells[i][j].owner == Player.Black for i in range(4)):
                 return Player.Black
             elif all(self.board_cells[i][j].owner == Player.White for i in range(4)):
                 return Player.White
-
+    
+        # Check main diagonal
         if all(self.board_cells[i][i].owner == Player.Black for i in range(4)):
             return Player.Black
         elif all(self.board_cells[i][i].owner == Player.White for i in range(4)):
             return Player.White
+    
+        # Check other diagonal
         if all(self.board_cells[i][abs(3 - i)].owner == Player.Black for i in range(4)):
             return Player.Black
         elif all(self.board_cells[i][abs(3 - i)].owner == Player.White for i in range(4)):
             return Player.White
-
+    
+        # If no winner is found
         return Player.NONE
         
     # changes current player
@@ -88,38 +94,51 @@ class Board:
             
     # add gobblet to a cell in the board but first check if it is valid to take this gobblet from out stacks
     def board_add_gobblet(self, row, column, player, bit):
+        # Check the validity of the move using board_check_validity method
         flag = self.board_check_validity(row, column, player, bit)
-
+    
+        # If the move is not valid, return False
         if not flag:
             return False
     
+        # Check if the target cell is occupied by the opponent's gobblet
         if self.board_cells[row][column].owner != player and self.board_cells[row][column].owner != Player.NONE:
             rows = 0
             columns = 0
             diagonal = 0
-
+    
+            # Check the number of opponent's gobblets in the same row
             for i in range(4):
                 if self.board_cells[row][i].owner != player and self.board_cells[row][i].owner != Player.NONE:
                     rows = rows + 1
-
+    
+                # Check the number of opponent's gobblets in the same column
                 if self.board_cells[i][column].owner != player and self.board_cells[i][column].owner != Player.NONE:
                     columns = columns + 1
+    
+            # Check the number of opponent's gobblets in the main diagonal
             if row == column:
-                    for i in range(4):
-                        if self.board_cells[i][i].owner != player and self.board_cells[i][i].owner != Player.NONE:
-                            diagonal = diagonal + 1
+                for i in range(4):
+                    if self.board_cells[i][i].owner != player and self.board_cells[i][i].owner != Player.NONE:
+                        diagonal = diagonal + 1
+    
+            # Check the number of opponent's gobblets in the secondary diagonal
             if row + column == 3:
-                    for i in range(4):
-                        if self.board_cells[i][i].owner != player and self.board_cells[i][i].owner != Player.NONE:
-                            diagonal = diagonal + 1
+                for i in range(4):
+                    if self.board_cells[i][3-i].owner != player and self.board_cells[i][3-i].owner != Player.NONE:
+                        diagonal = diagonal + 1
+    
+            # If there are three opponent's gobblets in a row, column, or diagonal, return False
             if rows == 3 or columns == 3 or diagonal == 3:
-                temp = True
-            else:
                 return False
-
+    
+        # Set flag_add to True, indicating a successful addition of a gobblet
         self.flag_add = True
+        # Record the current row and column for reference
         self.curr_row = row
         self.curr_col = column
+    
+        # Determine the current player's stack, size, and update the corresponding out gobblet
         if player == Player.Black:
             for i in range(3):
                 if self.black_out_gobblets[i] == bit:
@@ -136,60 +155,84 @@ class Board:
                     self.white_out_gobblets[i] = self.white_out_gobblets[i] >> 1
                     self.board_cells[row][column].add_gobblet(player, bit)
                     break
-
+    
+        # Return True to indicate a successful move
         return True
         
     # Introduce Player-Controlled Gobblet Addition    
     def player_add_gobblet(self, row, column, player, bit, index):
+        # Check the validity of the move using board_check_validity method
         flag = self.board_check_validity(row, column, player, bit)
-
+    
+        # If the move is not valid, return False
         if not flag:
             return False
+    
+        # Check if the target cell is occupied by the opponent's gobblet
         if self.board_cells[row][column].owner != player and self.board_cells[row][column].owner != Player.NONE:
             rows = 0
             columns = 0
             diagonal = 0
-
+    
+            # Check the number of opponent's gobblets in the same row
             for i in range(4):
                 if self.board_cells[row][i].owner != player and self.board_cells[row][i].owner != Player.NONE:
                     rows = rows + 1
-
+    
+                # Check the number of opponent's gobblets in the same column
                 if self.board_cells[i][column].owner != player and self.board_cells[i][column].owner != Player.NONE:
                     columns = columns + 1
+    
+            # Check the number of opponent's gobblets in the main diagonal
             if row == column:
-                    for i in range(4):
-                        if self.board_cells[i][i].owner != player and self.board_cells[i][i].owner != Player.NONE:
-                            diagonal = diagonal + 1
+                for i in range(4):
+                    if self.board_cells[i][i].owner != player and self.board_cells[i][i].owner != Player.NONE:
+                        diagonal = diagonal + 1
+    
+            # Check the number of opponent's gobblets in the secondary diagonal
             if row + column == 3:
-                    for i in range(4):
-                        if self.board_cells[i][3-i].owner != player and self.board_cells[i][3-i].owner != Player.NONE:
-                            diagonal = diagonal + 1
+                for i in range(4):
+                    if self.board_cells[i][3-i].owner != player and self.board_cells[i][3-i].owner != Player.NONE:
+                        diagonal = diagonal + 1
+    
+            # If there are three opponent's gobblets in a row, column, or diagonal, return False
             if rows == 3 or columns == 3 or diagonal == 3:
                 temp = True
             else:
                 return False
-
+    
+        # If the player is Black, update Black's out gobblets and add the gobblet to the board
         if player == Player.Black:
             self.black_out_gobblets[index] = self.black_out_gobblets[index] >> 1
             self.board_cells[row][column].add_gobblet(player, bit)
+        # If the player is White, update White's out gobblets and add the gobblet to the board
         else:
             self.white_out_gobblets[index] = self.white_out_gobblets[index] >> 1
             self.board_cells[row][column].add_gobblet(player, bit)
-
+    
+        # Return True to indicate a successful move
         return True    
         
     # check if there is a gobblet of the same size in the outside stacks, and also the cell validity
     def board_check_validity(self, row, column, player, bit):
         if not self.board_cells[row][column].check_validity(bit):
             return False
+
+        # Iterate through the player's out gobblets to check if the specified bit matches any of them
         for i in range(3):
+            # Check for White player's out gobblets
             if player == Player.White:
                 if self.white_out_gobblets[i] == bit:
+                    # Return True if the bit matches one of White's out gobblets
                     return True
+            # Check for Black player's out gobblets
             elif player == Player.Black:
                 if self.black_out_gobblets[i] == bit:
+                    # Return True if the bit matches one of Black's out gobblets
                     return True
-
+        
+        # Return False if the specified bit does not match any of the player's out gobblets
+        # or if the target cell is not valid for placing a gobblet of the specified size
         return False
 
     def get_gobblet_size(self, row, column):
