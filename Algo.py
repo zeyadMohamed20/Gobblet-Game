@@ -37,8 +37,11 @@ def minimax_with_alphabeta(node, depth, maximizing_player, root_flag):
             if child_node.alpha < node.beta:
                 node.beta = child_node.alpha
                 res_node = child_node
+            if node.beta <= node.alpha:
+                break
 
     if root_flag:
         return res_node
     else:
         return node
+
