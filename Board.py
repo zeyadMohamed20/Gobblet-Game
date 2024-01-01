@@ -85,3 +85,56 @@ class Board:
             return True
         else:
             return False
+            
+    # add gobblet to a cell in the board but first check if it is valid to take this gobblet from out stacks
+    def board_add_gobblet(self, row, column, player, bit):
+        flag = self.board_check_validity(row, column, player, bit)
+
+        if not flag:
+            return False
+    
+        if self.board_cells[row][column].owner != player and self.board_cells[row][column].owner != Player.NONE:
+            rows = 0
+            columns = 0
+            diagonal = 0
+
+            for i in range(4):
+                if self.board_cells[row][i].owner != player and self.board_cells[row][i].owner != Player.NONE:
+                    rows = rows + 1
+
+                if self.board_cells[i][column].owner != player and self.board_cells[i][column].owner != Player.NONE:
+                    columns = columns + 1
+            if row == column:
+                    for i in range(4):
+                        if self.board_cells[i][i].owner != player and self.board_cells[i][i].owner != Player.NONE:
+                            diagonal = diagonal + 1
+            if row + column == 3:
+                    for i in range(4):
+                        if self.board_cells[i][i].owner != player and self.board_cells[i][i].owner != Player.NONE:
+                            diagonal = diagonal + 1
+            if rows == 3 or columns == 3 or diagonal == 3:
+                temp = True
+            else:
+                return False
+
+        self.flag_add = True
+        self.curr_row = row
+        self.curr_col = column
+        if player == Player.Black:
+            for i in range(3):
+                if self.black_out_gobblets[i] == bit:
+                    self.curr_stack = i
+                    self.curr_size = bit
+                    self.black_out_gobblets[i] = self.black_out_gobblets[i] >> 1
+                    self.board_cells[row][column].add_gobblet(player, bit)
+                    break
+        else:
+            for i in range(3):
+                if self.white_out_gobblets[i] == bit:
+                    self.curr_stack = i
+                    self.curr_size = bit
+                    self.white_out_gobblets[i] = self.white_out_gobblets[i] >> 1
+                    self.board_cells[row][column].add_gobblet(player, bit)
+                    break
+
+        return True
