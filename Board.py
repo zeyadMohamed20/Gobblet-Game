@@ -66,3 +66,7 @@ class Board:
             return Player.White
 
         return Player.NONE
+        
+        # changes current player
+    def play_next(self):
+        self.current_player = Player.White if self.current_player == Player.Black else Player.Black
