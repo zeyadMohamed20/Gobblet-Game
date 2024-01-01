@@ -83,3 +83,15 @@ def tree_expand(board, depth):
             break
 
     return root
+
+def bot_turn(board, difficulty, player):
+    if not Board.flag:
+        Board.flag = True
+        row = generate_random_integer()
+        col = generate_random_integer()
+        board.board_add_gobblet(row, col, player, _4th)
+        board.play_next()
+        return board
+    else:
+        chosen_node = iterative_deepening(board, difficulty, player, True)
+        return chosen_node.board
