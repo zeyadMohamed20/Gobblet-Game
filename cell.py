@@ -51,7 +51,8 @@ class Cell:
     # check if the gobblet can be added to this cell, by checking that the added gobblet is bigger than the cell's biggest gobblet
     def check_validity(self, bit):
         return not (self.black_bitmap >= bit or self.white_bitmap >= bit)
-
+        
+    
     # changes owner by checking the greatest bitmap
     def change_owner(self):
         if self.white_bitmap == 0 and self.black_bitmap == 0:
