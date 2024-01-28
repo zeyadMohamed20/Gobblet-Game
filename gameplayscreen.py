@@ -7,7 +7,7 @@ import os
 from Board import *
 from Algo import *
 import time
-
+from controlFunctions import play_click_sound
 
 app = None
 
